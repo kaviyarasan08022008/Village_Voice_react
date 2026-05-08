@@ -1,21 +1,43 @@
-import React from 'react'
-import logImg from "../assets/logo.png"
+import React from 'react';
+import { Link } from 'react-router-dom';
+import logo from '../assets/logo.png';
 
 export default function NavBar() {
-  return (
-    <div className='bg-[#1015aeea] h-[120px]'>
-      <div className='flex px-[30px] p-[10px] gap-[15px] ]'>
-      <img className='h-[50px] rounded-[50px] ' src={logImg} alt="" />
-      <a className='font-black text-[34px] uppercase text-white text-h-[15px] leading-13 tracking-[1px] font-extrabold' href="">Village Voice</a>
-      </div>
-      <div className='flex list-none justify-around'>
-        <a className='mt-[-20px] font-bold text-white py-[4px] px-[4px] hover:bg-[#e63946] mt-[10px] rounded-[8px]' href="">Home</a>
-        <a className='mt-[-20px] font-bold text-white py-[4px] px-[4px] hover:bg-[#e63946] mt-[10px] rounded-[8px]' href="">File Complaints</a> 
-        <a className='mt-[-20px] font-bold text-white py-[4px] px-[4px] hover:bg-[#e63946] mt-[10px] rounded-[8px]' href="">Track Complaints</a> 
-        <a className='mt-[-20px] font-bold text-white py-[4px] px-[4px] hover:bg-[#e63946] mt-[10px] rounded-[8px]' href="">Login</a> 
-        <a className='mt-[-20px] font-bold text-white py-[4px] px-[4px] hover:bg-[#e63946] mt-[10px] rounded-[8px]' href="">Register</a> 
-        <a className='mt-[-20px] font-bold text-white py-[4px] px-[4px] hover:bg-[#e63946] mt-[10px] rounded-[8px]' href="">Contact</a>
-      </div>
-    </div>
-  )
+    return (
+        <nav className="bg-[#1b25bd] ">
+            <div className="flex flex-col w-full h-[125px]">
+                {/* Logo Section */}
+                <div className="flex items-center px-[35px] pt-[20px] pb-[4px] gap-[20px]">
+                    <div>
+                        <img src={logo} alt="Logo" className="h-[50px] w-[50px] rounded-[50px]" />
+                    </div>
+                    <Link to="/" className="font-[1000] text-[35px] uppercase text-white tracking-wider ">
+                        Village Voice
+                    </Link>
+                </div>
+
+                {/* Navigation Links */}
+                <div className="flex justify-around items-center w-full mb-[20px] p-[10px] ">
+                    <Link to="/" className="font-bold text-white text-[15px] hover:bg-[#e63946] p-[4px] rounded-[6px] transition-colors duration-200">
+                        Home
+                    </Link>
+                    <Link to="/fileComplaint" className="font-bold text-white text-[15px] hover:bg-[#e63946] p-[4px] rounded-[6px] transition-colors duration-200">
+                        File Complaints
+                    </Link>
+                    <Link to="/tracking" className="font-bold text-white text-[15px] hover:bg-[#e63946] p-[4px] rounded-[6px] transition-colors duration-200">
+                        Track Complaints
+                    </Link>
+                    <Link to="/login" className="font-bold text-white text-[15px] hover:bg-[#e63946] p-[4px] rounded-[6px] transition-colors duration-200">
+                        Login
+                    </Link>
+                    <Link to="/register" className="font-bold text-white text-[15px] hover:bg-[#e63946] p-[4px] rounded-[6px] transition-colors duration-200">
+                        Register
+                    </Link>
+                    <Link to="/contact" className="font-bold text-white text-[15px] hover:bg-[#e63946] p-[4px] rounded-[6px] transition-colors duration-200">
+                        Contact
+                    </Link>
+                </div>
+            </div>
+        </nav>
+    );
 }

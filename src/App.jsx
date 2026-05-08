@@ -1,10 +1,6 @@
-import React from 'react'
-import Landing from './pages/Landing'
+import router from "./Routers/Router";
+import { RouterProvider } from "react-router-dom";
 
 export default function App() {
-  return (
-    <div>
-      <Landing/>
-    </div>
-  )
+  return <RouterProvider router={router} />;
 }
