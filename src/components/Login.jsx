@@ -1,17 +1,59 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { API_BASE_URL } from '../apiConfig';
 
 export default function Login() {
-  const [loginType, setLoginType] = useState('Login');
+  const [loginType, setLoginType] = useState('People Login');
+  const [loading, setLoading] = useState(false);
+  const [credentials, setCredentials] = useState({
+    username: '',
+    password: ''
+  });
+
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const handleChange = (e) => {
+    setCredentials({ ...credentials, [e.target.name]: e.target.value });
+  };
+
+  const handleLogin = async (e) => {
     e.preventDefault();
-    if (loginType === 'Collector Login') {
-      navigate('/admin');
-    } else {
-      // For now, redirect to home or tracking for 'People Login'
-      navigate('/tracking');
+    setLoading(true);
+
+    try {
+      // Endpoint might differ based on loginType if needed, but usually it's one /login
+      const response = await fetch(`${API_BASE_URL}/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...credentials,
+          role: loginType === 'Collector Login' ? 'collector' : 'people'
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        alert('Login successful!');
+        // Store token if needed
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('user', JSON.stringify(data.user));
+
+        if (loginType === 'Collector Login') {
+          navigate('/admin');
+        } else {
+          navigate('/tracking');
+        }
+      } else {
+        alert(data.message || 'Login failed');
+      }
+    } catch (error) {
+      console.error('Error during login:', error);
+      alert('An error occurred. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -53,6 +95,9 @@ export default function Login() {
             <label className="block text-sm font-bold text-gray-800">Username :</label>
             <input
               type="text"
+              name="username"
+              value={credentials.username}
+              onChange={handleChange}
               placeholder="Username"
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 text-sm"
               required
@@ -63,6 +108,9 @@ export default function Login() {
             <label className="block text-sm font-bold text-gray-800">Password :</label>
             <input
               type="password"
+              name="password"
+              value={credentials.password}
+              onChange={handleChange}
               placeholder="Password"
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 text-sm"
               required
@@ -75,8 +123,12 @@ export default function Login() {
 
           {/* Action Button */}
           <div className="flex justify-center pt-4">
-            <button type="submit" className="bg-[#ffa000] hover:bg-[#ff8f00] text-white font-bold py-2 px-10 rounded-md shadow-md transition-colors duration-200">
-              Login
+            <button 
+              type="submit" 
+              disabled={loading}
+              className={`bg-[#ffa000] hover:bg-[#ff8f00] text-white font-bold py-2 px-10 rounded-md shadow-md transition-colors duration-200 ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+            >
+              {loading ? 'Logging in...' : 'Login'}
             </button>
           </div>
         </form>
